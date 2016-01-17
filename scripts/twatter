@@ -1,0 +1,55 @@
+#!/usr/bin/python
+from twatter import Search, CSVWriter, JSONWriter
+import sys
+
+args = list(sys.argv)
+if len(args) == 1:
+    sys.stderr.write('\nNo hashtag given.\n')
+else:
+    yielded = []
+    first = True
+    tags = []
+
+    options = {
+        'foramt': 'csv'
+    }
+
+    writers = {
+        'csv': CSVWriter,
+        'json': JSONWriter
+    }
+
+    for arg in args[1:]:
+        if arg.startswith('--'):
+            key, value = arg.rsplit('=', 1)
+            key = key[2:]
+            options[key] = value
+        elif arg.startswith('-'):
+            key, value = arg.rsplit('=', 1)
+            key = key[1:]
+            options[key] = value
+        else:
+            tags.append(arg)
+
+    try:
+        Writer = writers[
+            options['format']
+        ]
+    except KeyError:
+        sys.stderr.write('\n\Unrecognised format: %s\n' % options['format'])
+    else:
+        writer = Writer(sys.stdout,
+                        callback=options.get('callback')
+                        )
+
+        for tag in tags:
+            parser = Search(tag)
+
+            for result in parser.search():
+                if result['id'] in yielded:
+                    continue
+
+                yielded.append(result['id'])
+                writer.write(result)
+
+    writer.flush()
