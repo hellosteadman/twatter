@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Twatter</title>
+        <link rel="stylesheet" href="lib/normalise.css" />
+        <link rel="stylesheet" href="lib/gradients.css" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,700" />
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="lib/diagram.js"></script>
+    </head>
+    <body>
+        <script>
+            var DROPBOX_URL = 'https://dl.dropboxusercontent.com/u/354206/gewgaws/twatter/';
+
+            $(document).ready(
+                function() {
+                    var key = window.location.hash ? window.location.hash.substr(1) : null;
+                    var jsurl = DROPBOX_URL + key + '.js';
+                    var script = document.createElement('script');
+
+                    script.src = jsurl;
+                    $('body').append(script);
+                }
+            );
+        </script>
+    </body>
+</html>
